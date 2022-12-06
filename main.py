@@ -1,3 +1,4 @@
+
 import cv2
 import glob
 import time
@@ -5,6 +6,7 @@ import numpy
 from send import send_mail
 import glob
 import os
+from threading import Thread
 
 
 video=cv2.VideoCapture(0)
@@ -56,9 +58,13 @@ while True:
 
     print(list_status)
     if list_status[0]==1 and list_status[1]==0:
-        send_mail(new_ima)
-        clean_fol()
-
+        # send_mail(new_ima)
+        email_thread=Thread(target=send_mail(), args=(new_ima,)) #using threading for 2 processes
+        email_thread.daemon=True
+        clean_thread=Thread(target=clean_fol())
+        clean_thread.daemon=True
+        # clean_fol()
+        email_thread.start()
     cv2.imshow('my video', frame)
 
 
@@ -68,3 +74,4 @@ while True:
     if key==ord('q'):
         break
 video.release()
+clean_thread.start()
