@@ -7,6 +7,7 @@ from send import send_mail
 import glob
 import os
 from threading import Thread
+import streamlit as kp
 
 
 video=cv2.VideoCapture(0)
@@ -47,7 +48,6 @@ while True:
              status=1
              count = count + 1
              cv2.imwrite(f'images/{count}.png',frame)   #creating images for frames
-
              new_im=glob.glob('images/*.png')
              index=int(len(new_im)/2)
              new_ima=new_im[index]
@@ -58,11 +58,11 @@ while True:
 
     print(list_status)
     if list_status[0]==1 and list_status[1]==0:
-        # send_mail(new_ima)
-        email_thread=Thread(target=send_mail(), args=(new_ima,)) #using threading for 2 processes
-        email_thread.daemon=True
-        clean_thread=Thread(target=clean_fol())
-        clean_thread.daemon=True
+         # send_mail(new_ima)
+        email_thread=Thread(target=send_mail,args= (new_ima, ),daemon=True) #using threading for 2 processes
+        # email_thread.daemon=True
+        clean_thread=Thread(target=clean_fol,daemon=True)
+        # clean_thread.daemon=True
         # clean_fol()
         email_thread.start()
     cv2.imshow('my video', frame)
@@ -73,5 +73,6 @@ while True:
     key=cv2.waitKey(1)    # to quit cam when q is pressed
     if key==ord('q'):
         break
+
 video.release()
 clean_thread.start()

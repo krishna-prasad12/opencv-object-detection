@@ -7,8 +7,9 @@ import ssl
 password='xwwxetivpwxxnfsm'
 username='bloodshreder1@gmail.com'
 receiver='bloodshreder1@gmail.com'
-def send_mail(new):
-    file=new
+def send_mail(new_ima):
+    print('email fn start')
+    file=new_ima
     # print(file)
     message=EmailMessage()
     message['Subject']='Found someone'
@@ -26,4 +27,7 @@ def send_mail(new):
     gmail.login(username,password)
     gmail.sendmail(username,receiver,message.as_string())
     gmail.quit()
+    print('email function end')
 
+if __name__=='__main__':
+    send_mail('images/2.png')
